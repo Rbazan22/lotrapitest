@@ -1,25 +1,30 @@
 <script setup>
-import { ref } from "vue";
-import { useAdvice } from "../composables/useAdvice";
-const { advices, search } = useAdvice();
-const searchItem = ref("");
+import { useAPI } from "../composables/useAPI.js";
+
+const { characters, character, getCharacters } = useAPI();
+character.value = "";
 </script>
 
 <template>
-  <div>
-    <input
-      v-model="searchItem"
-      @change="search(searchItem)"
-      type="text"
-      placeholder="Search an Advice..."
-      class="w-full py-4 mt-16 text-xl text-center rounded-full"
-    />
-    <div class="grid grid-cols-2 gap-16 pt-16">
-      <div v-for="(advice, index) in advices" :key="index">
-        <p>
-          {{ advice.advice }}
-        </p>
-      </div>
-    </div>
+  <div class="mt-16">
+    <ul class="grid grid-cols-3 gap-12">
+      <router-link
+        class="p-4 bg-white rounded-lg shadow-2xl cursor-pointer hover:scale-105"
+        v-for="character in characters"
+        :key="character.id"
+        :to="'/character/${character.id}'"
+      >
+        <div>
+          <h1 class="text-xl font-semibold tracking-tight">
+            {{ character.name }}
+          </h1>
+          <p>Status: {{ character.status }}</p>
+          <p>Gender: {{ character.gender }}</p>
+          <p>Species: {{ character.species }}</p>
+          <p>Origin: {{ character.origin.name }}</p>
+          <p>Location of Origin: {{ character.location.name }}</p>
+        </div>
+      </router-link>
+    </ul>
   </div>
 </template>
